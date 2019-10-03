@@ -1,5 +1,7 @@
 package com.ing.ingproducts.service;
 
-public interface CategoryService {
+import com.ing.ingproducts.dto.CategoryResponse;
 
+public interface CategoryService {
+	 public CategoryResponse getAllCategories();
 }
