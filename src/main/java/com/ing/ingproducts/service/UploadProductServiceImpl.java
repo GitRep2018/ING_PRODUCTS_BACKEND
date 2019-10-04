@@ -24,10 +24,8 @@ public class UploadProductServiceImpl implements UploadProductService {
 	private static Logger logger = LoggerFactory.getLogger(UploadProductServiceImpl.class);
 	@Autowired
 	CategoryRepository categoryRepository;
-	String previousVal="";
-	
+	String previousVal = "";
 
-	          
 	@Override
 	@Transactional
 	public String upload(MultipartFile file) {
@@ -35,7 +33,7 @@ public class UploadProductServiceImpl implements UploadProductService {
 		if (!file.isEmpty()) {
 			try {			
 				XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());   
-				XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object 
+				XSSFSheet sheet = wb.getSheetAt(0);     
 				int noOfColumns = sheet.getRow(0).getPhysicalNumberOfCells();
                 if(noOfColumns>3)
                 	throw new CommonException(IngProductsUtil.EXCEL_EXCESS_COLUMN_EXCEPTION);
@@ -47,7 +45,7 @@ public class UploadProductServiceImpl implements UploadProductService {
 				itr.forEachRemaining(row -> {
 					String categoryName =row.getCell(0).toString();
 					boolean exist=checkExistence(categoryList,categoryName);
-                        //if(!categoryName.equals("") ) {
+                        
 					if(!categoryName.equals("")&& !previousVal.replaceAll("\\s+", "").equals(categoryName.replaceAll("\\s+", "")) && !exist) {
    							 Category category = new Category();
 	                         category.setCategoryName(categoryName);
@@ -58,7 +56,8 @@ public class UploadProductServiceImpl implements UploadProductService {
 					}
     			previousVal=categoryName;
 
-			    });
+                         });
+				
 				categoryRepository.deleteAll();
 				categoryRepository.saveAll(categoryList);
 			} catch (IOException e) {
@@ -72,42 +71,44 @@ public class UploadProductServiceImpl implements UploadProductService {
 		return "success";
 
 	}
-	
+
 	/**
 	 * @param sheet
 	 * @param category
-	 * @return List<Product> which return List of Products extracted from excel file.
-	 * @since  2019-10-03
+	 * @return List<Product> which return List of Products extracted from excel
+	 *         file.
+	 * @since 2019-10-03
 	 */
-	private List<Product> getProducts(XSSFSheet sheet,Category category) {
+	private List<Product> getProducts(XSSFSheet sheet, Category category) {
 		List<Product> products = new ArrayList<>();
-		Iterator<Row> rowiterator = sheet.iterator(); 		
+		Iterator<Row> rowiterator = sheet.iterator();
 		rowiterator.next();
 		rowiterator.forEachRemaining(row -> {
-			if(row.getCell(0).toString().replaceAll("\\s+", "").equals(category.getCategoryName().replaceAll("\\s+", ""))) {
-				Product product=new Product();
+			if (row.getCell(0).toString().replaceAll("\\s+", "")
+					.equals(category.getCategoryName().replaceAll("\\s+", ""))) {
+				Product product = new Product();
 				product.setProductName(row.getCell(1).toString());
 				product.setProductDescription(row.getCell(2).toString());
 				product.setCategory(category);
 				products.add(product);
 			}
 		});
-                 
+
 		return products;
 	}
-	
+
 	/**
 	 * @param categoryList
 	 * @param categoryName
 	 * @return boolean
-	 * @since  2019-10-03
+	 * @since 2019-10-03
 	 */
-	private boolean checkExistence(List<Category> categoryList,String categoryName) {
-		boolean existence=false;
-		 if(categoryList.stream().anyMatch(category->category.getCategoryName().equals(categoryName)))
-			 existence=true;
-		 else
-			 existence=false;
+	private boolean checkExistence(List<Category> categoryList, String categoryName) {
+		boolean existence = false;
+		if (categoryList.stream().anyMatch(category -> category.getCategoryName().equals(categoryName)))
+			existence = true;
+		else
+			existence = false;
 		return existence;
 	}
 }

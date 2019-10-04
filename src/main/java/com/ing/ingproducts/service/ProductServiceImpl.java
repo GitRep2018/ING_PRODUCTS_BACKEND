@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ing.ingproducts.dto.ProductDescription;
+import com.ing.ingproducts.dto.ProductDescriptionDto;
 import com.ing.ingproducts.dto.ProductDetails;
 import com.ing.ingproducts.dto.ProductResponse;
 import com.ing.ingproducts.entity.Product;
@@ -29,9 +29,9 @@ public class ProductServiceImpl implements ProductService{
 		{
 			throw new CommonException(IngProductsUtil.PRODUCT_CATEGORY_NOT_FOUND);
 		}
-		List<ProductDetails> productDetailsList=new ArrayList<ProductDetails>();
+		List<ProductDetails> productDetailsList=new ArrayList<>();
 		products.stream().forEach(
-				(product)->{
+				product->{
 					ProductDetails productDetails=new ProductDetails();
 					productDetails.setProductId(product.getProductId());
 					productDetails.setProductDescription(product.getProductDescription());
@@ -45,9 +45,9 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 
-	public ProductDescription getProductDetails(Long productId) {
+	public ProductDescriptionDto getProductDetails(Long productId) {
 		
-		ProductDescription productDescription=new ProductDescription();
+		ProductDescriptionDto productDescription=new ProductDescriptionDto();
 		
 		Optional<Product> product=productRepository.findById(productId);
 		if(product.isPresent())

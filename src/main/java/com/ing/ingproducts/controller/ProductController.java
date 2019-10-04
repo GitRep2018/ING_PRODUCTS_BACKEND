@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ing.ingproducts.dto.ProductDescription;
+import com.ing.ingproducts.dto.ProductDescriptionDto;
 import com.ing.ingproducts.dto.ProductResponse;
 import com.ing.ingproducts.service.ProductService;
 
@@ -30,17 +30,17 @@ public class ProductController {
 		LOGGER.info("inside product Controller");
 		ProductResponse productResponse=productServiceIntf.getProductsByCategory(categoryId);
 		
-		return new ResponseEntity<ProductResponse>(productResponse,HttpStatus.OK);
+		return new ResponseEntity<>(productResponse,HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/products/{productId}")
-	public ResponseEntity<ProductDescription> getProductDetails(@PathVariable Long productId)
+	public ResponseEntity<ProductDescriptionDto> getProductDetails(@PathVariable Long productId)
 	{
 		LOGGER.info("inside product Description");
-		ProductDescription productDescription=productServiceIntf.getProductDetails(productId);
+		ProductDescriptionDto productDescription=productServiceIntf.getProductDetails(productId);
 		
-		return new ResponseEntity<ProductDescription>(productDescription,HttpStatus.OK);
+		return new ResponseEntity<>(productDescription,HttpStatus.OK);
 		
 	}
 
