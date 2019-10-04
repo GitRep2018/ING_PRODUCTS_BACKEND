@@ -31,7 +31,6 @@ public class UploadProductServiceTest {
 	public void setUp() throws FileNotFoundException, IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("Productdetails.xlsx").getFile());
-		System.out.println(file.getAbsolutePath());
 		firstFile = new MockMultipartFile("data", new FileInputStream(file));
 		Category category=new Category();
 		category.setCategoryId(1L);
