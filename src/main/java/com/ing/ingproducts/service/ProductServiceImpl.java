@@ -25,6 +25,10 @@ public class ProductServiceImpl implements ProductService{
 		
 		ProductResponse productResponse=new ProductResponse();
 		List<Product> products =productRepository.findProductByCategoryId(categoryId);
+		if(products.isEmpty())
+		{
+			throw new CommonException(IngProductsUtil.PRODUCT_CATEGORY_NOT_FOUND);
+		}
 		List<ProductDetails> productDetailsList=new ArrayList<ProductDetails>();
 		products.stream().forEach(
 				(product)->{
