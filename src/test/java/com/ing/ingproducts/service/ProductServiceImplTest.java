@@ -18,6 +18,7 @@ import com.ing.ingproducts.dto.ProductDetails;
 import com.ing.ingproducts.dto.ProductResponse;
 import com.ing.ingproducts.entity.Category;
 import com.ing.ingproducts.entity.Product;
+import com.ing.ingproducts.exception.CommonException;
 import com.ing.ingproducts.repository.ProductRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -88,6 +89,16 @@ public class ProductServiceImplTest {
 		Assert.assertEquals(productResponse.getStatusMessage(),actualProductResponse.getStatusMessage());
 	}
 	
+	@Test(expected = CommonException.class)
+	public void testGetProductsByCategory1()
+	{
+		products=new ArrayList<Product>();
+		Mockito.when(productRepository.findProductByCategoryId(category.getCategoryId())).thenReturn(products);
+		
+		ProductResponse actualProductResponse=productServiceImpl.getProductsByCategory(category.getCategoryId());
+		
+		Assert.assertEquals(productResponse.getStatusMessage(),actualProductResponse.getStatusMessage());
+	}
 	@Test
 	public void testGetProductDetails()
 	{
@@ -95,6 +106,14 @@ public class ProductServiceImplTest {
 		Mockito.when(productRepository.findById(product1.getProductId())).thenReturn(Optional.of(product1));
 		ProductDescription productDescription=productServiceImpl.getProductDetails(product1.getProductId());
 		Assert.assertEquals(product1.getProductId(),productDescription.getProductId());
+
+	}
+	@Test(expected = CommonException.class)
+	public void testGetProductDetails1()
+	{
+		Product product6=new Product();
+	    ProductDescription productDescription=productServiceImpl.getProductDetails(product6.getProductId());
+		 Assert.assertEquals(product1.getProductId(),productDescription.getProductId());
 
 	}
 

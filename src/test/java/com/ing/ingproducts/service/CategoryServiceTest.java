@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.ing.ingproducts.dto.CategoryDetails;
 import com.ing.ingproducts.dto.CategoryResponse;
 import com.ing.ingproducts.entity.Category;
+import com.ing.ingproducts.exception.CommonException;
 import com.ing.ingproducts.repository.CategoryRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,4 +47,11 @@ public class CategoryServiceTest {
 		 assertEquals(new Integer(200) , result.getStatusCode());
 	 }
 	 
+	 @Test(expected = CommonException.class)
+	 public void testGetAllCategoriesException() {
+		 categories=new ArrayList<>();
+		 Mockito.when(categoryRepository.findAll()).thenReturn(categories);
+		 CategoryResponse result= categoryServiceImpl.getAllCategories();
+		 assertEquals(new Integer(200) , result.getStatusCode());
+	 }
 }
